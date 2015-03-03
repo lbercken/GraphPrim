@@ -58,7 +58,15 @@ public class Main {
            // Overriding the compare method to sort the weights
            @Override
            public int compare(Vertex v1, Vertex v2) {
-               return v1.getKey() - v2.getKey();
+               if(v1.getKey() == v2.getIndex()) {
+                   return 0;
+               }
+               else if(v1.getKey() < v2.getKey()) {
+                   return -1;
+               }
+               else {
+                   return 1;
+               }
            }
     }
     
@@ -77,7 +85,7 @@ public class Main {
                 if(q.contains(v) && weight < v.getKey()) {
                     MST.addEdge(v.getIndex(), u.getIndex(), weight);
                     MST.addEdge(u.getIndex(), v.getIndex(), weight);
-                    v.setKey(weight);
+                    v.setKey(weight); // update PriorityQueue ?
                 }
             }
         }
