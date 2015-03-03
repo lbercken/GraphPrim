@@ -2,6 +2,7 @@
 package graphprim;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -11,9 +12,13 @@ import java.util.Hashtable;
  */
 public class Vertex {
    
+    private int key;
+    private final int index;
     private Hashtable<Vertex, Integer> outnodes; // Adjacency list, with weighted edges
     
-    public Vertex() {
+    public Vertex(int index) {
+        key = Integer.MAX_VALUE;
+        this.index = index;
         outnodes = new Hashtable<>();
     }
     
@@ -38,5 +43,26 @@ public class Vertex {
             ret.add((Vertex) en.nextElement());
         }
         return ret;
+    }
+    
+    public void setKey(int key) {
+        this.key = key;
+    }
+    
+    public Hashtable getHashtable() {
+        return outnodes;
+    }
+    
+    public int getKey() {
+        return key;
+    }
+    
+    public int getIndex() {
+        return index;
+    }
+    
+    @Override
+    public String toString() {
+        return Main.ALPHABET[this.index] + " ";
     }
  }

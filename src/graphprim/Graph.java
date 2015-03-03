@@ -2,6 +2,7 @@
 package graphprim;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  *
@@ -15,7 +16,7 @@ public class Graph {
     public Graph(int size) {
         nodes = new ArrayList<>();
         for(int i = 0; i < size; i++) {
-            nodes.add(new Vertex());
+            nodes.add(new Vertex(i));
         }
         this.size = size;
     }
@@ -56,4 +57,27 @@ public class Graph {
         return nodes.get(vertex).getSuccessors();
     }
     
+    public Vertex getVertex(int i) {
+        return nodes.get(i);
+    }
+    
+    public int getSize() {
+        return size;
+    }
+    
+    @Override
+    public String toString() {
+        int weight = 0;
+        String ret = "";
+        for(Vertex node : nodes) {
+            ret += node.toString();
+            Hashtable table = node.getHashtable();
+            for(Vertex successor : node.getSuccessors()) {
+                ret += successor.toString();
+                weight +=(int) table.get(successor);
+            }
+            ret += "\n";
+        }
+        return ret + "\nWeight = " + weight/2 + "\n\n";
+    }
 }
