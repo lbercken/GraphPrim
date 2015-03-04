@@ -65,6 +65,10 @@ public class Graph {
         return size;
     }
     
+    public ArrayList getAllNodes() {
+        return nodes;
+    }
+    
     @Override
     public String toString() {
         int weight = 0;

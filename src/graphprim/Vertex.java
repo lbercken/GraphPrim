@@ -14,11 +14,13 @@ public class Vertex {
    
     private int key;
     private final int index;
+    private Vertex parent;
     private Hashtable<Vertex, Integer> outnodes; // Adjacency list, with weighted edges
     
     public Vertex(int index) {
         key = Integer.MAX_VALUE;
         this.index = index;
+        parent = null;
         outnodes = new Hashtable<>();
     }
     
@@ -64,5 +66,13 @@ public class Vertex {
     @Override
     public String toString() {
         return Main.ALPHABET[this.index] + " ";
+    }
+    
+    public void setParent(Vertex parent) {
+        this.parent = parent;
+    }
+    
+    public Vertex getParent() {
+        return parent;
     }
  }

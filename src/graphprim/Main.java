@@ -2,6 +2,7 @@
 package graphprim;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -11,8 +12,9 @@ import java.util.PriorityQueue;
  */
 public class Main {
     
-    public static final char[] ALPHABET = {'A','B','C','D','E','F','G','H','I','J'};
+    public static final char[] ALPHABET = {'A','B','C','D','E','F','G','H','I'};
     public static final int GRAPHSIZE = 9;
+    public static final int ROOT = 0;
     
     public static void main(String[] args) {
         // Build graph (from slides)
@@ -49,8 +51,18 @@ public class Main {
         System.out.print(graph);
         
         // Prim's Algorithm
-        Graph MST = mst_prim(graph, 0);
-        System.out.println(MST);
+        mst_prim(graph, ROOT);
+        int weight = 0;
+        for(int i = 0; i < GRAPHSIZE; i++) {
+            Vertex v = graph.getVertex(i);
+            // Note that root does not have a parent
+            if(i != ROOT) {
+                weight += (int) v.getHashtable().get(v.getParent());
+            }
+            System.out.println(v + " with parent: " + v.getParent());
+        }
+        System.out.println("Total weight of MST = " + weight);
+        
         
     }
     
@@ -70,25 +82,26 @@ public class Main {
            }
     }
     
-    public static Graph mst_prim(Graph graph, int root) {
-        Graph MST = new Graph(graph.getSize());
+    public static void mst_prim(Graph graph, int root) {
         graph.getVertex(root).setKey(0);
-        PriorityQueue<Vertex> q = new PriorityQueue<>(MST.getSize(), new Vsort());
-        for(int i = 0; i < graph.getSize(); i++) {
-            q.add(graph.getVertex(i));
-        }
+        ArrayList<Vertex> q = new ArrayList<>(graph.getAllNodes());
+        Collections.sort(q, new Vsort());
+        // PriorityQueue<Vertex> q = new PriorityQueue<>(graph.getSize(), new Vsort());
+        //for(int i = 0; i < graph.getSize(); i++) {
+        //    q.add(graph.getVertex(i));
+        //}
         while(!q.isEmpty()) {
-            Vertex u = q.remove();
+            Vertex u = q.get(0);
+            q.remove(0);
             ArrayList<Vertex> successors = u.getSuccessors();
             for (Vertex v : successors) {
-                int weight = (int) u.getHashtable().get(v);
+                int weight = (int) u.getHashtable().get(v); // Get weight of edge (u,v)
                 if(q.contains(v) && weight < v.getKey()) {
-                    MST.addEdge(v.getIndex(), u.getIndex(), weight);
-                    MST.addEdge(u.getIndex(), v.getIndex(), weight);
-                    v.setKey(weight); // update PriorityQueue ?
+                    v.setParent(u);
+                    v.setKey(weight);
+                    Collections.sort(q, new Vsort());
                 }
             }
         }
-        return MST;
     }
 }
