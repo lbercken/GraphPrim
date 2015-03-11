@@ -62,7 +62,9 @@ import java.util.*; // For ArrayList
  */
 public final class FibonacciHeap<T> {
     
-	//Our own addition 
+	//Our own addition
+	//This array makes sure we can keep track of original vertices
+	//since this fibonacci class creates new generic objects called 'Entries'
 	private Object  [] allVertices = new Object[Main.GRAPHSIZE];  
 	 
 	/* In order for all of the Fibonacci heap operations to complete in O(1),
@@ -127,19 +129,26 @@ public final class FibonacciHeap<T> {
         }
         
         //3 functions below are our own addition
+        //toString function
         public String toString() {
         	return mElem.toString();
         }
         
+        //Used to set or unset this item's presence in the queue
+        //Prim's algorithm needs to know 
         public void setPresent() {
         	this.isPresent = !this.isPresent;
         }
         
+        //Find whether this item is in the queue or if
+        //it has already been dequeued
         public boolean isPresent () {
         	return this.isPresent;
         }
     }
-
+    
+    //Our own addition
+    //Used to get pointer to an entry in this queue at pos n
     public Entry<T> getEntryAt(int n) {
     	return (Entry<T>) allVertices[n];
     }
