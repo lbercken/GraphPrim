@@ -43,53 +43,81 @@ public class Main {
         	System.out.println("Type the corresponding number to choose a variant or -1 to end the program.");
         	input = scanner.nextLine();
         	
-        	//Run normal list version
-        	if (input.equals("1")) {
-            	printfilelist();
-            	input = scanner.nextLine();
-            	if (input.equals("1")) {
-            		Graph graph = reader("slides.txt");
-            		runmst(graph);
-            	} else if (input.equals("2")) {
-            		 Graph graph = reader("normal.txt");
-            		 runmst(graph);
-            	} else if (input.equals("3")) {
-           		 Graph graph = reader("mega.txt");
-           		 runmst(graph);
-            	}
-        	}
-        	
-        	//Run priorityqueue version
-        	else if (input.equals("2")) {
-            	printfilelist();
-            	input = scanner.nextLine();
-            	if (input.equals("1")) {
-            		Graph graph = reader("slides.txt");
-            		runPrio(graph);
-            	} else if (input.equals("2")) {
-            		 Graph graph = reader("normal.txt");
-            		 runPrio(graph);
-            	} else if (input.equals("3")) {
-	           		Graph graph = reader("mega.txt");
-	           		runPrio(graph);
-            	}
-        	}
-        	
-        	//Run fibonacci heap version
-        	else if (input.equals("3")) {
-            	printfilelist();
-            	input = scanner.nextLine();
-            	if (input.equals("1")) {
-            		Graph graph = reader("slides.txt");
-            		runFibo(graph);
-            	} else if (input.equals("2")) {
-            		 Graph graph = reader("normal.txt");
-            		 runFibo(graph);
-            	} else if (input.equals("3")) {
-	           		 Graph graph = reader("mega.txt");
-	           		runFibo(graph);
-            	}
-        	}
+            //Run normal list version
+            switch (input) {
+                case "1":
+                    printfilelist();
+                    input = scanner.nextLine();
+                    switch (input) {
+                        case "1":
+                        {
+                            Graph graph = reader("slides.txt");
+                            runmst(graph);
+                            break;
+                        }
+                        case "2":
+                        {
+                            Graph graph = reader("normal.txt");
+                            runmst(graph);
+                            break;
+                        }
+                        case "3":
+                        {
+                            Graph graph = reader("mega.txt");
+                            runmst(graph);
+                            break;
+                        }
+                    }
+                    break;
+                case "2":
+                    printfilelist();
+                    input = scanner.nextLine();
+                    switch (input) {
+                        case "1":
+                        {
+                            Graph graph = reader("slides.txt");
+                            runPrio(graph);
+                            break;
+                        }
+                        case "2":
+                        {
+                            Graph graph = reader("normal.txt");
+                            runPrio(graph);
+                            break;
+                        }
+                        case "3":
+                        {
+                            Graph graph = reader("mega.txt");
+                            runPrio(graph);
+                            break;
+                        }
+                    }
+                    break;
+                case "3":
+                    printfilelist();
+                    input = scanner.nextLine();
+                    switch (input) {
+                        case "1":
+                        {
+                            Graph graph = reader("slides.txt");
+                            runFibo(graph);
+                            break;
+                        }
+                        case "2":
+                        {
+                            Graph graph = reader("normal.txt");
+                            runFibo(graph);
+                            break;
+                        }
+                        case "3":
+                        {
+                            Graph graph = reader("mega.txt");
+                            runFibo(graph);
+                            break;
+                        }
+                    }
+                    break;
+            }
         }
         scanner.close();
     }
@@ -190,7 +218,7 @@ public class Main {
     
     public static void mst_primPrio(Graph graph, int root) {
         graph.getVertex(root).setKey(0); // O(1)
-        PriorityQueue<Vertex> q = new PriorityQueue<Vertex>(); // O(1)
+        PriorityQueue<Vertex> q = new PriorityQueue<>(); // O(1)
         ArrayList<Vertex> vertices = graph.getAllNodes(); // O(1)
         for(Vertex v : vertices) { // O(|V|)
             q.add(v); // O(1)
@@ -212,7 +240,7 @@ public class Main {
     
     public static void mst_primFibo(Graph graph, int root) {
         graph.getVertex(root).setKey(0); // O(1)
-        FibonacciHeap<Vertex> q = new FibonacciHeap<Vertex>(); // O(1)
+        FibonacciHeap<Vertex> q = new FibonacciHeap<>(); // O(1)
         ArrayList<Vertex> vertices = graph.getAllNodes(); // O(1)
         for(Vertex v : vertices) { // O(|V|)
             FibonacciHeap.Entry<Vertex> a = q.enqueue(v, v.getKey());
@@ -241,6 +269,7 @@ public class Main {
         for(int i = 0; i < lines; i++) {
             String line = br.readLine();
             String split[] = line.split(" ");
+            // Add edge in both directions, since graph is undirected
             graph.addEdge(Integer.parseInt(split[0]), Integer.parseInt(split[1]),  Double.parseDouble(split[2]));
             graph.addEdge(Integer.parseInt(split[1]), Integer.parseInt(split[0]),  Double.parseDouble(split[2]));
         }
