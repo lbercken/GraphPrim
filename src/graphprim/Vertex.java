@@ -12,19 +12,19 @@ import java.util.Hashtable;
  */
 public class Vertex {
    
-    private int key;
+    private double key;
     private final int index;
     private Vertex parent;
-    private Hashtable<Vertex, Integer> outnodes; // Adjacency list, with weighted edges
+    private Hashtable<Vertex, Double> outnodes; // Adjacency list, with weighted edges
     
     public Vertex(int index) {
-        key = Integer.MAX_VALUE;
+        key = Double.MAX_VALUE;
         this.index = index;
         parent = null;
         outnodes = new Hashtable<>();
     }
     
-    public void addOutnode(Vertex node, int weight) {
+    public void addOutnode(Vertex node, double weight) {
         outnodes.put(node, weight);
     }
     
@@ -47,7 +47,7 @@ public class Vertex {
         return ret;
     }
     
-    public void setKey(int key) {
+    public void setKey(double key) {
         this.key = key;
     }
     
@@ -55,7 +55,7 @@ public class Vertex {
         return outnodes;
     }
     
-    public int getKey() {
+    public double getKey() {
         return key;
     }
     
@@ -65,7 +65,7 @@ public class Vertex {
     
     @Override
     public String toString() {
-        return Main.ALPHABET[this.index] + " ";
+        return index + "";
     }
     
     public void setParent(Vertex parent) {

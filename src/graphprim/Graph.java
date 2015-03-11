@@ -21,7 +21,7 @@ public class Graph {
         this.size = size;
     }
     
-    public void addEdge(int from, int to, int weight) {
+    public void addEdge(int from, int to, double weight) {
         // Precondition
         if(from >= size || to >= size) {
             System.out.println("Error: from or to is greater than size."
@@ -71,14 +71,14 @@ public class Graph {
     
     @Override
     public String toString() {
-        int weight = 0;
+        double weight = 0;
         String ret = "";
         for(Vertex node : nodes) {
-            ret += node.toString();
+            ret += node.toString() + " ";
             Hashtable table = node.getHashtable();
             for(Vertex successor : node.getSuccessors()) {
-                ret += successor.toString();
-                weight +=(int) table.get(successor);
+                ret += successor.toString() + " ";
+                weight += (double) table.get(successor);
             }
             ret += "\n";
         }
