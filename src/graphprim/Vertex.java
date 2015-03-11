@@ -10,7 +10,7 @@ import java.util.Hashtable;
  *
  * @author Laurens van den Bercken
  */
-public class Vertex {
+public class Vertex implements Comparable {
    
     private double key;
     private final int index;
@@ -75,4 +75,15 @@ public class Vertex {
     public Vertex getParent() {
         return parent;
     }
+
+	@Override
+	public int compareTo(Object o) {
+		Vertex that = (Vertex) o;
+		if (this.key - that.getKey() < 0) {
+			return -1;
+		} else if(this.key - that.getKey() > 0) {
+			return 1;
+		}
+		return 0;
+	}
  }

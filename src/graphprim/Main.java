@@ -9,68 +9,141 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Scanner;
 
 /**
- *
- * @author Laurens van den Bercken
+ * Main class, contains core algorithm and user interaction
+ * @author Laurens van den Bercken, s4057384
+ * @author Jeftha Spunda, s4174615
  */
 public class Main {
     
-    // public static final char[] ALPHABET = {'A','B','C','D','E','F','G','H','I'};
-    public static int GRAPHSIZE;
-    public static final int ROOT = 0;
+    public static int GRAPHSIZE; //nr of nodes
+    public static final int ROOT = 0;//starting node
+    private static String input = ""; //user input
     
+    /**
+     * Main function that runs input loop. From there
+     * the necessary functions are called to run the program.
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
-        // Build graph (from slides)
-        Graph graph = reader("file.txt");
-// Graph from slides
-//        graph.addEdge(0, 1, 4);
-//        graph.addEdge(0, 7, 8);
-//        graph.addEdge(1, 2, 8);
-//        graph.addEdge(1, 7, 11);
-//        graph.addEdge(2, 3, 7);
-//        graph.addEdge(2, 8, 2);
-//        graph.addEdge(2, 5, 4);
-//        graph.addEdge(3, 4, 9);
-//        graph.addEdge(3, 5, 14);
-//        graph.addEdge(4, 5, 10);
-//        graph.addEdge(5, 6, 2);
-//        graph.addEdge(6, 7, 1);
-//        graph.addEdge(6, 8, 6);
-//        graph.addEdge(7, 8, 7);
-//        graph.addEdge(1, 0, 4);
-//        graph.addEdge(7, 0, 8);
-//        graph.addEdge(2, 1, 8);
-//        graph.addEdge(7, 1, 11);
-//        graph.addEdge(3, 2, 7);
-//        graph.addEdge(8, 2, 2);
-//        graph.addEdge(5, 2, 4);
-//        graph.addEdge(4, 3, 9);
-//        graph.addEdge(5, 3, 14);
-//        graph.addEdge(5, 4, 10);
-//        graph.addEdge(6, 5, 2);
-//        graph.addEdge(7, 6, 1);
-//        graph.addEdge(8, 6, 6);
-//        graph.addEdge(8, 7, 7);
+        Scanner scanner = new Scanner(System.in);
         
-        System.out.print(graph);
+        //Welcome message
+        System.out.println("Prim's algorithm for building MST by Laurens van den Bercken and Jeftha Spunda\n"
+        		+ "We have 3 variants of the algorithm, each with a different complexity. However, they all use the same graph representation.\n"
+        		+ "1. Using a normal list and constantly selecting the minimum value by hand\n"
+        		+ "2. Using a priorityqueue that is updated every iteration to select the minimum value\n"
+        		+ "3. Using a Fibonacci heap class to keep track of the ordering of vertices and their keys\n");
         
-        // Prim's Algorithm
-        mst_prim(graph, ROOT);
-        double weight = 0;
-        for(int i = 0; i < GRAPHSIZE; i++) {
-            Vertex v = graph.getVertex(i);
-            // Note that root does not have a parent
-            if(i != ROOT) {
-                weight += (double) v.getHashtable().get(v.getParent());
-            }
-            System.out.println(v + " with parent: " + v.getParent());
+        //Keep going through input loop until user types -1
+        while (!input.equals("-1")) {
+        	System.out.println("Type the corresponding number to choose a variant or -1 to end the program.");
+        	input = scanner.nextLine();
+        	
+        	//Run normal list version
+        	if (input.equals("1")) {
+            	printfilelist();
+            	input = scanner.nextLine();
+            	if (input.equals("1")) {
+            		Graph graph = reader("slides.txt");
+            		runmst(graph);
+            	} else if (input.equals("2")) {
+            		 Graph graph = reader("normal.txt");
+            		 runmst(graph);
+            	} else if (input.equals("3")) {
+           		 Graph graph = reader("mega.txt");
+           		 runmst(graph);
+            	}
+        	}
+        	
+        	//Run priorityqueue version
+        	else if (input.equals("2")) {
+            	printfilelist();
+            	input = scanner.nextLine();
+            	if (input.equals("1")) {
+            		Graph graph = reader("slides.txt");
+            		runPrio(graph);
+            	} else if (input.equals("2")) {
+            		 Graph graph = reader("normal.txt");
+            		 runPrio(graph);
+            	} else if (input.equals("3")) {
+	           		Graph graph = reader("mega.txt");
+	           		runPrio(graph);
+            	}
+        	}
+        	
+        	//Run fibonacci heap version
+        	else if (input.equals("3")) {
+            	printfilelist();
+            	input = scanner.nextLine();
+            	if (input.equals("1")) {
+            		Graph graph = reader("slides.txt");
+            		runFibo(graph);
+            	} else if (input.equals("2")) {
+            		 Graph graph = reader("normal.txt");
+            		 runFibo(graph);
+            	} else if (input.equals("3")) {
+	           		 Graph graph = reader("mega.txt");
+	           		runFibo(graph);
+            	}
+        	}
         }
-        System.out.println("Total weight of MST = " + weight);
-        
-        
+        scanner.close();
     }
     
+    /**
+     * Runs the normal list version 
+     * @param g the graph of which the MST is going to be computed.
+     */
+    static void runmst(Graph g) {
+        double starttime = System.currentTimeMillis();
+        mst_prim(g, ROOT);
+        double stoptime = System.currentTimeMillis();
+        g.printMST();
+        System.out.printf("Runtime in millisec: %f (printing MST not included)\n", stoptime-starttime);
+    }
+    
+    /**
+     * Runs the priorityqueue version 
+     * @param g the graph of which the MST is going to be computed.
+     */
+    static void runPrio(Graph g) {
+        double starttime = System.currentTimeMillis();
+        mst_primPrio(g, ROOT);
+        double stoptime = System.currentTimeMillis();
+        g.printMST();
+        System.out.printf("Runtime in millisec: %f (printing MST not included)\n", stoptime-starttime);
+    }
+    
+    /**
+     * Runs the fibonacci heap version 
+     * @param g the graph of which the MST is going to be computed.
+     */
+    static void runFibo(Graph g) {
+        double starttime = System.currentTimeMillis();
+        mst_primFibo(g, ROOT);
+        double stoptime = System.currentTimeMillis();
+        g.printMST();
+        System.out.printf("Runtime in millisec: %f (printing MST not included)\n", stoptime-starttime);
+    }
+    
+    /**
+     * Prints the files the user can choose to compute an MST of.
+     */
+    static void printfilelist() {
+    	System.out.println("Type corresponding number to choose a file or -1 to end the program:\n"
+    			+ "1. slides.txt (for the graph from the lecture slides)\n"
+    			+ "2. normal.txt (for a mediumsized graph of 10000 nodes)\n"
+    			+ "3. mega.txt (for a large graph of 1000000 nodes (only Fibonacci variant finishes this within feasible time))");
+    }
+    
+    /**
+     * Small class that's used as a comparator so that Collections class
+     * knows how to compare two Vertices.
+     */
     static class Vsort implements Comparator<Vertex> {
            // Overriding the compare method to sort the weights
            @Override
@@ -87,12 +160,19 @@ public class Main {
            }
     }
     
+    /**
+     * Actual implementation of the normal list version of Prim's algorithm
+     * As you can see the q is a normal (unsorted) arraylist.
+     * Vertex u is extracted and then removed by calling native java functions.
+     * @param graph
+     * @param root
+     */
     public static void mst_prim(Graph graph, int root) {
         graph.getVertex(root).setKey(0); // O(1)
-        ArrayList<Vertex> q = new ArrayList<>(); 
+        ArrayList<Vertex> q = new ArrayList<>(); // O(1)
         ArrayList<Vertex> vertices = graph.getAllNodes(); // O(1)
         for(Vertex v : vertices) { // O(|V|)
-            q.add(v);
+            q.add(v); // O(1)
         }
         while(!q.isEmpty()) { // O(|V|)
             Vertex u = Collections.min(q, new Vsort()); // O(len(q))
@@ -108,9 +188,53 @@ public class Main {
         }
     }
     
+    public static void mst_primPrio(Graph graph, int root) {
+        graph.getVertex(root).setKey(0); // O(1)
+        PriorityQueue<Vertex> q = new PriorityQueue<Vertex>(); // O(1)
+        ArrayList<Vertex> vertices = graph.getAllNodes(); // O(1)
+        for(Vertex v : vertices) { // O(|V|)
+            q.add(v); // O(1)
+        }
+        while(!q.isEmpty()) { // O(|V|)
+            Vertex u = q.remove(); // O(log (len q))
+            ArrayList<Vertex> successors = u.getSuccessors(); // O(1)
+            for (Vertex v : successors) { // O(len(suc))
+                double weight = (double) u.getHashtable().get(v); // Get weight of edge (u,v), O(len(suc))
+                if(q.contains(v) && weight < v.getKey()) { // O(len(q))
+                    v.setParent(u); // O(1)
+                    v.setKey(weight); // O(1)
+                    q.remove(v); //O(len(q)) note that complexity is not log but linear here due to removal of specific object v
+                    q.add(v);  //O(log (len q))
+                }
+            }
+        }
+    }
+    
+    public static void mst_primFibo(Graph graph, int root) {
+        graph.getVertex(root).setKey(0); // O(1)
+        FibonacciHeap<Vertex> q = new FibonacciHeap<Vertex>(); // O(1)
+        ArrayList<Vertex> vertices = graph.getAllNodes(); // O(1)
+        for(Vertex v : vertices) { // O(|V|)
+            FibonacciHeap.Entry<Vertex> a = q.enqueue(v, v.getKey());
+            a.setValue(v);          
+        }
+        while(!q.isEmpty()) { // O(|V|)
+            FibonacciHeap.Entry<Vertex> min = q.dequeueMin();
+            Vertex u = min.getValue();
+            ArrayList<Vertex> successors = u.getSuccessors(); // O(1)\
+            for (Vertex v : successors) { // O(len(suc))
+            	FibonacciHeap.Entry<Vertex> vf = q.getEntryAt(v.getIndex());
+                double weight = (double) u.getHashtable().get(v); // Get weight of edge (u,v), O(len(suc))
+                if(q.contains(vf) && weight < vf.getPriority()) { // O(len(q)
+                    v.setParent(u); // O(1)
+                    q.decreaseKey(vf, weight); // O(1)
+                }
+            }
+        }
+    }
+    
     private static Graph reader(String filename) throws FileNotFoundException, IOException {
         BufferedReader br = new BufferedReader(new FileReader(filename));
-        StringBuilder sb = new StringBuilder();
         GRAPHSIZE = Integer.parseInt(br.readLine());
         int lines = Integer.parseInt(br.readLine());
         Graph graph = new Graph(GRAPHSIZE);

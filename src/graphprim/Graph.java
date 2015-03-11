@@ -65,8 +65,27 @@ public class Graph {
         return size;
     }
     
-    public ArrayList getAllNodes() {
+    public ArrayList<Vertex> getAllNodes() {
         return nodes;
+    }
+    
+    public void printMST() {
+        String s = "";
+        double total = 0;
+        for (int i = 0; i < nodes.size(); i++) {
+            s += nodes.get(i) +  " with parent ";
+            Vertex parent = nodes.get(i).getParent();
+            if (parent != null) {
+                double weight = (double) nodes.get(i).getHashtable().get(parent);
+                s += parent + " with weight " + weight;
+                total += weight;
+            } else {
+                s += "null";
+            }
+            System.out.println(s);
+            s = new String();
+        }
+       System.out.println("Total weight = " + total);
     }
     
     @Override
