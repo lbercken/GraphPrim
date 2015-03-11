@@ -164,6 +164,7 @@ public class Main {
      * Actual implementation of the normal list version of Prim's algorithm
      * As you can see the q is a normal (unsorted) arraylist.
      * Vertex u is extracted and then removed by calling native java functions.
+     * These are expensive operations all running in linear time
      * @param graph
      * @param root
      */
