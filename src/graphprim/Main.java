@@ -242,6 +242,20 @@ public class Main {
         }
     }
     
+    /**
+     * Actual implementation of the priorityqueue version of Prim's algorithm
+     * The q is now a priorityqueue that is updated everytime something is added.
+     * So if we change the key of one of the vertices, the queue is not updated
+     * until the element is removed and inserted again. This is obviously 
+     * making this algorithm more complex
+     * 
+     * Extracting the minimal value of the queue happens in log n time, but 
+     * removing a specific object happens in linear time. Inserting that element
+     * into the queue again happens in log n time again
+     * 
+     * @param graph
+     * @param root
+     */
     public static void mst_primPrio(Graph graph, int root) {
         graph.getVertex(root).setKey(0); // O(1)
         PriorityQueue<Vertex> q = new PriorityQueue<>(); // O(1)
@@ -264,6 +278,16 @@ public class Main {
         }
     }
     
+    /**
+     * Actual implementation of Prim's algorithm using a fibonacci heap.
+     * We are using an external class found on the web (see FibonacciHeap.java for author)
+     * with a few additions of our own to make it usable with our own implementation of a graph.
+     * 
+     * This is the most efficient version, because the most expensive operation is extracting
+     * the minimum of the queue, which happens in log n time.  
+     * @param graph
+     * @param root
+     */
     public static void mst_primFibo(Graph graph, int root) {
         graph.getVertex(root).setKey(0); // O(1)
         FibonacciHeap<Vertex> q = new FibonacciHeap<>(); // O(1)
@@ -279,7 +303,7 @@ public class Main {
             for (Vertex v : successors) { // O(len(suc))
             	FibonacciHeap.Entry<Vertex> vf = q.getEntryAt(v.getIndex());
                 double weight = (double) u.getHashtable().get(v); // Get weight of edge (u,v), O(len(suc))
-                if(q.contains(vf) && weight < vf.getPriority()) { // O(len(q)
+                if(q.contains(vf) && weight < vf.getPriority()) { // O(1)
                     v.setParent(u); // O(1)
                     q.decreaseKey(vf, weight); // O(1)
                 }
@@ -287,6 +311,17 @@ public class Main {
         }
     }
     
+    /**
+     * Reader function that returns a graph after reading it from a file
+     * The file is expected to have the following format
+     * line 1: 		|V|
+     * line 2: 		|E|
+     * line 3-|E|:	node1 node2 weight
+     * @param filename
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     private static Graph reader(String filename) throws FileNotFoundException, IOException {
         BufferedReader br = new BufferedReader(new FileReader(filename));
         GRAPHSIZE = Integer.parseInt(br.readLine());
@@ -295,7 +330,7 @@ public class Main {
         for(int i = 0; i < lines; i++) {
             String line = br.readLine();
             String split[] = line.split(" ");
-            // Add edge in both directions, since graph is undirected
+            // Add edge in both directions, since every edge is present in only one way in the file
             graph.addEdge(Integer.parseInt(split[0]), Integer.parseInt(split[1]),  Double.parseDouble(split[2]));
             graph.addEdge(Integer.parseInt(split[1]), Integer.parseInt(split[0]),  Double.parseDouble(split[2]));
         }
