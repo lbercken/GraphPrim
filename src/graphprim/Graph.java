@@ -112,29 +112,7 @@ public class Graph {
     public ArrayList<Vertex> getAllNodes() {
         return nodes;
     }
-    
-    /**
-     * This function prints the MST, if constructed already
-     */
-    public void printMST() {
-        String s = "";
-        double total = 0;
-        for (int i = 0; i < nodes.size(); i++) {
-            s += nodes.get(i) +  " with parent ";
-            Vertex parent = nodes.get(i).getParent();
-            if (parent != null) {
-                double weight = (double) nodes.get(i).getHashtable().get(parent);
-                s += parent + " with weight " + weight;
-                total += weight;
-            } else {
-                s += "null";
-            }
-            System.out.println(s);
-            s = new String();
-        }
-       System.out.println("Total weight = " + total);
-    }
-    
+
     /**
      * To string function of a graph
      * @return the graph as a string representation

@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class Main {
     
     public static int GRAPHSIZE; //nr of nodes
-    public static final int ROOT = 0;//starting node
+    public static final int ROOT = 0;//starting node for building MST
     private static String input = ""; //user input
     
     /**
@@ -122,6 +122,31 @@ public class Main {
         scanner.close();
     }
     
+    
+    /**
+     * This function prints the MST, if constructed already
+     */
+    public static void printMST(Graph g) {
+       ArrayList<Vertex> nodes = g.getAllNodes();
+    	String s = "";
+        double total = 0;
+        for (int i = 0; i < nodes.size(); i++) {
+            s += nodes.get(i) +  " with parent ";
+            Vertex parent = nodes.get(i).getParent();
+            if (parent != null) {
+                double weight = (double) nodes.get(i).getHashtable().get(parent);
+                s += parent + " with weight " + weight;
+                total += weight;
+            } else {
+                s += "null";
+            }
+            System.out.println(s);
+            s = new String();
+        }
+       System.out.println("Total weight = " + total);
+    }
+    
+    
     /**
      * Runs the normal list version 
      * @param g the graph of which the MST is going to be computed.
@@ -130,7 +155,7 @@ public class Main {
         double starttime = System.currentTimeMillis();
         mst_prim(g, ROOT);
         double stoptime = System.currentTimeMillis();
-        g.printMST();
+        printMST(g);
         System.out.printf("Runtime in millisec: %f (printing MST not included)\n", stoptime-starttime);
     }
     
@@ -142,7 +167,7 @@ public class Main {
         double starttime = System.currentTimeMillis();
         mst_primPrio(g, ROOT);
         double stoptime = System.currentTimeMillis();
-        g.printMST();
+        printMST(g);
         System.out.printf("Runtime in millisec: %f (printing MST not included)\n", stoptime-starttime);
     }
     
@@ -154,7 +179,7 @@ public class Main {
         double starttime = System.currentTimeMillis();
         mst_primFibo(g, ROOT);
         double stoptime = System.currentTimeMillis();
-        g.printMST();
+        printMST(g);
         System.out.printf("Runtime in millisec: %f (printing MST not included)\n", stoptime-starttime);
     }
     
