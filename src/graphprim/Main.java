@@ -63,7 +63,7 @@ public class Main {
                         }
                         case "3":
                         {
-                            Graph graph = reader("mega.txt");
+                            Graph graph = reader("largeEWG.txt");
                             runmst(graph);
                             break;
                         }
@@ -87,7 +87,7 @@ public class Main {
                         }
                         case "3":
                         {
-                            Graph graph = reader("mega.txt");
+                            Graph graph = reader("largeEWG.txt");
                             runPrio(graph);
                             break;
                         }
@@ -111,7 +111,7 @@ public class Main {
                         }
                         case "3":
                         {
-                            Graph graph = reader("mega.txt");
+                            Graph graph = reader("largeEWG.txt");
                             runFibo(graph);
                             break;
                         }
@@ -127,7 +127,8 @@ public class Main {
      * This function prints the MST, if constructed already
      */
     public static void printMST(Graph g) {
-       ArrayList<Vertex> nodes = g.getAllNodes();
+    	System.out.println("Final MST");
+    	ArrayList<Vertex> nodes = g.getAllNodes();
     	String s = "";
         double total = 0;
         for (int i = 0; i < nodes.size(); i++) {
@@ -190,9 +191,9 @@ public class Main {
     	System.out.println("Type corresponding number to choose a file or -1 to end the program:\n"
     			+ "1. slides.txt (for the graph from the lecture slides)\n"
     			+ "2. normal.txt (for a mediumsized graph of 10000 nodes)\n"
-    			+ "3. mega.txt (for a large graph of 1000000 nodes (only Fibonacci variant finishes this within feasible time))\n"
-    			+ "PLEASE NOTE: Because mega.txt is 180MB, we did not include it when handing in via blackboard.\n"
-    			+ "You can download it from http://algs4.cs.princeton.edu/43mst/largeEWG.txt\n");
+    			+ "3. largeEWG.txt (for a large graph of 1000000 nodes (only Fibonacci variant finishes this within feasible time))\n"
+    			+ "PLEASE NOTE: Because largeEWG.txt is 180MB, we did not include it when handing in via blackboard.\n"
+    			+ "You can download it from http://algs4.cs.princeton.edu/43mst/largeEWG.txt");
     }
     
     /**
@@ -283,7 +284,7 @@ public class Main {
     /**
      * Actual implementation of Prim's algorithm using a fibonacci heap.
      * We are using an external class found on the web (see FibonacciHeap.java for author)
-     * with a few additions of our own to make it usable with our own implementation of a graph.
+     * with a few additions of our own to make it usable with our implementation of a graph.
      * 
      * This is the most efficient version, because the most expensive operation is extracting
      * the minimum of the queue, which happens in log n time.  
@@ -326,6 +327,7 @@ public class Main {
      */
     private static Graph reader(String filename) throws FileNotFoundException, IOException {
         BufferedReader br = new BufferedReader(new FileReader(filename));
+        System.out.println("Reading " + filename + "...");
         GRAPHSIZE = Integer.parseInt(br.readLine());
         int lines = Integer.parseInt(br.readLine());
         Graph graph = new Graph(GRAPHSIZE);
@@ -337,7 +339,7 @@ public class Main {
             graph.addEdge(Integer.parseInt(split[1]), Integer.parseInt(split[0]),  Double.parseDouble(split[2]));
         }
         br.close();
-        System.out.println("Done reading");
+        System.out.println("Done reading.\n");
         return graph;
     }
 }
