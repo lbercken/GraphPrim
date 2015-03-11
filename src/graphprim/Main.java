@@ -190,7 +190,9 @@ public class Main {
     	System.out.println("Type corresponding number to choose a file or -1 to end the program:\n"
     			+ "1. slides.txt (for the graph from the lecture slides)\n"
     			+ "2. normal.txt (for a mediumsized graph of 10000 nodes)\n"
-    			+ "3. mega.txt (for a large graph of 1000000 nodes (only Fibonacci variant finishes this within feasible time))");
+    			+ "3. mega.txt (for a large graph of 1000000 nodes (only Fibonacci variant finishes this within feasible time))\n"
+    			+ "PLEASE NOTE: Because mega.txt is 180MB, we did not include it when handing in via blackboard.\n"
+    			+ "You can download it from http://algs4.cs.princeton.edu/43mst/largeEWG.txt\n");
     }
     
     /**
